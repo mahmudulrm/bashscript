@@ -1,0 +1,13 @@
+#!/bin/bash
+
+rm -rf *.txt
+rm -rf output.csv
+
+awk -v RS= '{print > ("wr-" NR ".txt")}' text  // file create from a big with space between line.
+
+for i in {1,2,3,4,5};  do rm -rf wr-${i}.txt; done;
+
+for f in `ls -1 *.txt | sort -V`;  do
+cat ${f} | grep -e uid: -e employeeNumber: -e mail: | awk '{print $ 2}' > filename
+awk -v RS='[,\n]' '{a=$0;getline b; getline c; print c,a,b}' OFS=, filename >> output.csv
+done;
